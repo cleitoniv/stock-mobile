@@ -104,6 +104,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_beep:
+    dependency: "direct main"
+    description:
+      name: flutter_beep
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   flutter_blurhash:
     dependency: transitive
     description:
@@ -146,6 +153,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.2"
+  flutter_ringtone_player:
+    dependency: "direct main"
+    description:
+      name: flutter_ringtone_player
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.2.0"
   flutter_secure_storage:
     dependency: "direct main"
     description:
@@ -422,6 +436,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.27.7"
+  scan:
+    dependency: "direct main"
+    description:
+      name: scan
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.6.0"
   scribble:
     dependency: "direct main"
     description:

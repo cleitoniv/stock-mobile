@@ -33,9 +33,11 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  Widget screen(state) {
+  Widget screen(Map state) {
     print("36");
-    print(state);
+    if (state.isEmpty) {
+      return Container();
+    }
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -82,7 +84,7 @@ class _HomePageState extends State<HomePage> {
                                   RoundedRectangleBorder(
                                       borderRadius:
                                           BorderRadius.circular(200)))),
-                      onPressed: () {},
+                      onPressed: () => store.start(),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -110,26 +112,26 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButtonLocation: ExpandableFab.location,
-        floatingActionButton: ExpandableFab(
-          overlayStyle: null,
-          backgroundColor: Theme.of(context).highlightColor,
-          closeButtonStyle: ExpandableFabCloseButtonStyle(
-              backgroundColor: Theme.of(context).highlightColor),
-          children: [
-            OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                    side: BorderSide(color: Theme.of(context).highlightColor)),
-                onPressed: () {},
-                child: Text(
-                  "Minhas Ordens",
-                  style: TextStyle(
-                      color: Theme.of(context).highlightColor,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700),
-                )),
-          ],
-        ),
+        // floatingActionButtonLocation: ExpandableFab.location,
+        // floatingActionButton: ExpandableFab(
+        //   overlayStyle: null,
+        //   backgroundColor: Theme.of(context).highlightColor,
+        //   closeButtonStyle: ExpandableFabCloseButtonStyle(
+        //       backgroundColor: Theme.of(context).highlightColor),
+        //   children: [
+        //     OutlinedButton(
+        //         style: OutlinedButton.styleFrom(
+        //             side: BorderSide(color: Theme.of(context).highlightColor)),
+        //         onPressed: () {},
+        //         child: Text(
+        //           "Minhas Ordens",
+        //           style: TextStyle(
+        //               color: Theme.of(context).highlightColor,
+        //               fontSize: 18,
+        //               fontWeight: FontWeight.w700),
+        //         )),
+        //   ],
+        // ),
         drawer: const DrawerWidget(),
         body: ScopedBuilder(
           store: store,
@@ -137,7 +139,7 @@ class _HomePageState extends State<HomePage> {
                 child: Text("Erro no processamento dos dados!"),
               )),
           onLoading: (context) => Center(child: CircularProgressIndicator()),
-          onState: (context, state) => SafeArea(child: screen(state)),
+          onState: (context, Map state) => SafeArea(child: screen(state)),
         ));
   }
 }

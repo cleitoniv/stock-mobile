@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:central_stock_mobile/app/repositories/home_repository.dart';
+import 'package:central_stock_mobile/app/utils/utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_triple/flutter_triple.dart';
 
@@ -12,7 +13,11 @@ class HomeStore extends NotifierStore<Exception, Map> {
     setLoading(true);
     try {
       Response resp = await repository.currentUser();
-      update(resp.data);
+      if (resp.data['data']['state'] != 'idle') {
+        Utils.redirectFun(resp.data['data']);
+      } else {
+        update(resp.data);
+      }
     } on Exception catch (e) {
       setError(e);
     } finally {
@@ -24,7 +29,8 @@ class HomeStore extends NotifierStore<Exception, Map> {
     setLoading(true);
     try {
       Response resp = await repository.start();
-      update(resp.data);
+      print(resp.data);
+      Utils.redirectFun(resp.data['data']['agent']);
     } on Exception catch (e) {
       setError(e);
     } finally {

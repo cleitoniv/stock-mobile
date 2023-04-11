@@ -45,6 +45,9 @@ dependencies:
   dio: ^5.1.0
   flutter_secure_storage: ^8.0.0
   flutter_expandable_fab: ^1.7.1
+  scan: ^1.6.0
+  flutter_ringtone_player: ^3.2.0
+  flutter_beep: ^1.0.0
 
 dev_dependencies:
   flutter_test:
@@ -104,6 +107,7 @@ flutter:
     - assets/images/intro_2.png
     - assets/images/no_image_product.jpeg
     - assets/images/logo_alinhada.png
+    - assets/images/cesta.jpg
     - assets/icons/home.png
     - assets/icons/wallet.png
     - assets/icons/info.png
