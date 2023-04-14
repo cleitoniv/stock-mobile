@@ -1,6 +1,7 @@
 import 'package:central_stock_mobile/app/repositories/picking_repository.dart';
 import 'package:central_stock_mobile/app/utils/utils.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_triple/flutter_triple.dart';
 
 class PickingStore extends NotifierStore<Exception, Map> {
@@ -31,7 +32,9 @@ class PickingStore extends NotifierStore<Exception, Map> {
     setLoading(true);
     try {
       Response resp = await repository.submit();
-      Utils.redirectFun(resp.data['data']['agent']);
+      if (resp.statusCode == 200) {
+        Modular.to.pushNamed('/picking/success');
+      }
     } on Exception catch (e) {
       setError(e);
     } finally {

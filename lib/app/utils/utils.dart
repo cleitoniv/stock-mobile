@@ -19,6 +19,9 @@ class Utils {
   }
 
   static String parseDate(s) {
+    if (s == null) {
+      return '';
+    }
     var d = DateTime.parse(s);
     return "${d.day}/${d.month}/${d.year} ${d.hour}:${d.minute}:${d.second}";
   }

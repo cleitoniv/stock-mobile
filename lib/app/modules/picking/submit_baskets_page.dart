@@ -178,38 +178,25 @@ class SubmitBasketsPageState extends State<SubmitBasketsPage> {
                           const SizedBox(
                             height: 5,
                           ),
-                          Text("Total de itens ${basket['products'].length}",
-                              style: TextStyle(color: Colors.black54)),
                           const SizedBox(
                             height: 5,
                           ),
-                          basket['capacity'] <= basket['products'].length
-                              ? Container(
-                                  padding: const EdgeInsets.all(10),
-                                  decoration: const BoxDecoration(
-                                      color: Colors.green,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(5))),
-                                  child: const Text(
-                                    "COMPLETA",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w700,
-                                        letterSpacing: 2),
-                                  ))
-                              : Container(
-                                  padding: const EdgeInsets.all(10),
-                                  decoration: const BoxDecoration(
-                                      color: Colors.amber,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(5))),
-                                  child: const Text(
-                                    "PARCIAL",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w700,
-                                        letterSpacing: 2),
-                                  ))
+                          Container(
+                              width: 120,
+                              padding: const EdgeInsets.all(10),
+                              decoration: const BoxDecoration(
+                                  color: Colors.green,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5))),
+                              child: Center(
+                                child: Text(
+                                  "${basket['products'].length} itens",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w700,
+                                      letterSpacing: 2),
+                                ),
+                              ))
                         ],
                       ))
                     ],
