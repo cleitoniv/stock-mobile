@@ -89,7 +89,7 @@ class _HomePageState extends State<HomePage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Icon(
-                            Icons.play_for_work,
+                            Icons.play_arrow,
                             size: 60,
                             color: Color(0xff36AFC6),
                           ),

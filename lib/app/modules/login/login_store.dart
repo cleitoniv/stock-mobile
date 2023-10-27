@@ -25,7 +25,7 @@ class LoginStore extends NotifierStore<Exception, Map> {
         await storage.writeSecureData("auth", resp.data["data"]);
         print("24");
         print(await storage.readAll());
-        Modular.to.pushNamed('/home/');
+        Modular.to.pushNamed('/initial_screen');
       } else {
         update({...state, 'error': 'Login Ivalido'});
       }

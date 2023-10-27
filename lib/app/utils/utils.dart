@@ -4,15 +4,19 @@ class Utils {
   static void redirectFun(s) {
     switch (s['state']) {
       case 'selecting_basket':
+      // print("tela não alterada automaticamente pois o switch foi desativado");
         Modular.to.pushNamed('/basket');
         break;
       case 'product_picking':
+      // print("tela não alterada automaticamente pois o switch foi desativado");
         Modular.to.pushNamed('/picking');
         break;
       case 'submiting_baskets':
+      // print("tela não alterada automaticamente pois o switch foi desativado");
         Modular.to.pushNamed('/picking/submit');
         break;
       case 'idle':
+      // print("tela não alterada automaticamente pois o switch foi desativado");
         Modular.to.pushNamed('/home/');
         break;
     }

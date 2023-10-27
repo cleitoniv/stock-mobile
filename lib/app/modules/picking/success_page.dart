@@ -28,16 +28,16 @@ class SuccessPageState extends State<SuccessPage> {
       body: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
+          children: const [
+             Icon(
               Icons.check_circle_rounded,
               size: 80,
               color: Colors.green,
             ),
-            const SizedBox(
+             SizedBox(
               height: 10,
             ),
-            const Text("Pedido separado com sucesso!")
+             Text("Pedido separado com sucesso!")
           ],
         )
       ]),

@@ -33,12 +33,12 @@ class BasketPageState extends State<BasketPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-          padding: EdgeInsets.only(bottom: 50),
+          padding: const EdgeInsets.only(bottom: 50),
           height: MediaQuery.of(context).size.height,
           child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
+                SizedBox(
                   height: MediaQuery.of(context).size.height / 2,
                   child: Stack(children: [
                     MobileScanner(
@@ -46,7 +46,7 @@ class BasketPageState extends State<BasketPage> {
                       errorBuilder: (context, error, child) {
                         controller.stop();
                         controller.start();
-                        return Center(
+                        return const Center(
                           child: CircularProgressIndicator(),
                         );
                       },
