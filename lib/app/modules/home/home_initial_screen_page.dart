@@ -113,7 +113,7 @@ class HomeInitialScreenPageState extends State<HomeInitialScreenPage> {
                               shape: MaterialStateProperty.all<
                                       RoundedRectangleBorder>(
                                   const RoundedRectangleBorder())),
-                          onPressed: () => Modular.to.pushNamed('/type_expedition'),
+                          onPressed: () => Modular.to.pushNamed('/type_expedition/'),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children:  [

@@ -1,53 +1,46 @@
-import 'package:central_stock_mobile/app/modules/Expedition/expedition_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_beep/flutter_beep.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
-class ExpeditionPage extends StatefulWidget {
-  final String title;
-  const ExpeditionPage({Key? key, this.title = 'ExpeditionPage'})
-      : super(key: key);
-  @override
-  ExpeditionPageState createState() => ExpeditionPageState();
-}
+import 'expedition_store.dart';
 
-class ExpeditionPageState extends State<ExpeditionPage> {
+class ServiceTicketPage extends StatefulWidget {
+  final String title;
+  const ServiceTicketPage({Key? key, this.title = 'ServiceTicketPage'}) : super(key: key);
+  @override
+  ServiceTicketPageState createState() => ServiceTicketPageState();
+}
+class ServiceTicketPageState extends State<ServiceTicketPage> {
   String scannerUid = '';
-  late final ExpeditionStore expedStore;
+  late final ExpeditionStore store;
   MobileScannerController controller = MobileScannerController();
+  var dropdownvalue = '';
   List selectedItems = [];
-  var orderList = [];
+  var orderList = [
+    {'cliente': 'CLEITON MEIRELES'},
+    {'cliente': 'PAULO MADEIRA'},
+    {'cliente': 'ALBERTO BITTECOURT'},
+    {'cliente': 'THIAGO BOEKER'},
+    {'cliente': 'JESSE ALVES'}
+  ];
 
   @override
   void initState() {
     super.initState();
     controller.stop();
-    expedStore = Modular.get<ExpeditionStore>();
+    // store = Modular.get<BasketStore>();
   }
 
   @override
   void dispose() {
-    Modular.dispose<ExpeditionStore>();
+    // Modular.dispose<BasketStore>();
     super.dispose();
   }
-  
-   order(client) async {
-    var order = await expedStore.getExpedOrder(client);
-    setState(() {
-      orderList = order;
-    });
-  }
-  
+
   @override
-  Widget build(BuildContext context)  {
-    
+  Widget build(BuildContext context) {
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
-    if (orderList.isEmpty) {
-      order(args['selectedValue']);
-    }
-
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.only(bottom: 50),
@@ -75,7 +68,7 @@ class ExpeditionPageState extends State<ExpeditionPage> {
                       if (barcode.rawValue != scannerUid) {
                         for (var i = 0; i < orderList.length; i++) {
                           if (!selectedItems.contains(barcode.rawValue) &&
-                              orderList[i]['pedido']!
+                              orderList[i]['cliente']!
                                   .contains(barcode.rawValue as String)) {
                             selectedItems.add(barcode.rawValue);
                             setState(() {
@@ -156,11 +149,11 @@ class ExpeditionPageState extends State<ExpeditionPage> {
                           side: BorderSide(color: Colors.black),
                         ),
                         selected:
-                            selectedItems.contains(orderList[index]['pedido']),
+                            selectedItems.contains(orderList[index]['servico']),
                         selectedTileColor:
                             const Color.fromARGB(255, 102, 248, 168),
                         title: Text(
-                          orderList[index]['pedido'] as String,
+                          orderList[index]['servico'] as String,
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                               fontWeight: FontWeight.w900, color: Colors.black),
@@ -177,14 +170,12 @@ class ExpeditionPageState extends State<ExpeditionPage> {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(150, 45),
-               backgroundColor: orderList.length == selectedItems.length ? Theme.of(context).highlightColor : Colors.grey
+                backgroundColor: Theme.of(context).highlightColor,
               ),
-              onPressed: orderList.length == selectedItems.length ? () {
+              onPressed: () {
                 print(selectedItems);
                 print(scannerUid);
                 // store.select(scannerUid);
-              } : () {
-                
               },
               child: const Text(
                 "Gerar etiqueta",

@@ -155,7 +155,8 @@ class SelectClientPageState extends State<SelectClientPage> {
               fixedSize: const Size(180, 35),
             ),
             onPressed: () {
-              print('sem ação');
+              Modular.to.pushNamed('/service_ticket',
+                  arguments: {'selectedValue': selectedRoute});
             },
             child: const Text(
               'GERAR ETIQUETA',

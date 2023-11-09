@@ -6,17 +6,66 @@ import 'package:dio/dio.dart';
 class ExpeditionRepository {
   final http = ClientHttp().getClient();
 
-  Future<Response> select(uid) async {
+  Future<Response> expedClient(params) async {
     final storage = new SecureStorage();
     Map auth = await storage.readAll();
-    return http.post("/api/agent/select_basket",
-        data: jsonEncode({'basket_uid': uid}),
-        options: Options(headers: {
+    return http.post(
+      "/api/agent/exped_clients",
+      data: jsonEncode(params),
+      options: Options(
+        headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer ${auth['auth']}"
-        }));
+        },
+      ),
+    );
   }
-  
+
+  Future<Response> expedRoutes(params) async {
+    final storage = new SecureStorage();
+    Map auth = await storage.readAll();
+    return http.get(
+      "/api/agent/exped_routes?params=$params",
+      data: jsonEncode(params),
+      options: Options(
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer ${auth['auth']}"
+        },
+      ),
+    );
+  }
+
+  Future<Response> expedOrder(params) async {
+    final storage = new SecureStorage();
+    Map auth = await storage.readAll();
+    return await http.get(
+      "/api/agent/exped_order?params=$params",
+      data: jsonEncode(params),
+      options: Options(
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer ${auth['auth']}"
+        },
+      ),
+    );
+  }
+
+  Future<Response> expedActivities(params) async {
+    final storage = new SecureStorage();
+    Map auth = await storage.readAll();
+    return http.post(
+      "/api/agent/exped_activities",
+      data: jsonEncode(params),
+      options: Options(
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer ${auth['auth']}"
+        },
+      ),
+    );
+  }
+
   // Future<Response> currentUser() async {
   //   final store = new SecureStorage();
   //   Map auth = await store.readAll();

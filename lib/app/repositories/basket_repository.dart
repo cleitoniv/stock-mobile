@@ -10,11 +10,15 @@ class BasketRepository {
   Future<Response> select(uid) async {
     final storage = new SecureStorage();
     Map auth = await storage.readAll();
-    return http.post("/api/agent/select_basket",
-        data: jsonEncode({'basket_uid': uid}),
-        options: Options(headers: {
+    return http.post(
+      "/api/agent/select_basket",
+      data: jsonEncode({'basket_uid': uid}),
+      options: Options(
+        headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer ${auth['auth']}"
-        }));
+        },
+      ),
+    );
   }
 }

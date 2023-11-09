@@ -11,17 +11,35 @@ class SelectActivityPageState extends State<SelectActivityPage> {
   var selectedItems = [];
   bool selectedValue = false;
   var selectedRoute = '';
-  var items = [
+  // var items = [
+  //   'SP MOTOBOY - 1',
+  //   'SP MOTOBOY - 2',
+  //   'SP MOTOBOY - 3',
+  //   'SP MOTOBOY - 4',
+  //   'SP SEDEX'
+  // ];
+  
+  var items = {
+    'rota': [
     'SP MOTOBOY - 1',
     'SP MOTOBOY - 2',
     'SP MOTOBOY - 3',
     'SP MOTOBOY - 4',
     'SP SEDEX'
-  ];
+  ],'distribuidor': [
+    'CRYSTAL',
+    'ESTRELA',
+    'PRIME'
+  ]
+  };
   // var items = 'ES Motoboy';
 
   @override
   Widget build(BuildContext context) {
+    final typeExped =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+        print(typeExped);
+        print(items[typeExped['selectedExped']]);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -74,7 +92,7 @@ class SelectActivityPageState extends State<SelectActivityPage> {
                 child: ListView.builder(
                   padding: EdgeInsets.zero,
                   shrinkWrap: false,
-                  itemCount: items.length,
+                  itemCount: items[typeExped['selectedExped']]?.length ?? 0,
                   itemBuilder: (BuildContext context, int index) {
                     return Material(
                       child: ListTile(
@@ -82,12 +100,12 @@ class SelectActivityPageState extends State<SelectActivityPage> {
                           shape: const RoundedRectangleBorder(
                             side: BorderSide(color: Colors.black),
                           ),
-                          selected: selectedItems.contains(items[index]),
+                          selected: selectedItems.contains(items[typeExped['selectedExped']]![index]),
                           selectedTileColor:
                               const Color.fromARGB(255, 34, 218, 231),
                           title: Text(
                             maxLines: 1,
-                            items[index],
+                            items[typeExped['selectedExped']]![index],
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                                 fontWeight: FontWeight.w900,
@@ -95,23 +113,22 @@ class SelectActivityPageState extends State<SelectActivityPage> {
                           ),
                           onTap: () {
                             setState(() {
-                              selectedRoute = items[index];
+                              selectedRoute = items[typeExped['selectedExped']]![index];
                             });
-                            selectedItems.contains(items[index])
-                                ? selectedItems.remove(items[index])
-                                : selectedItems.add(items[index]);
-                            print(selectedValue);
-                            print(items[index]);
-                            if (items[index] != selectedItems[0]) {
-                              print('passando');
+                            selectedItems.contains(items[typeExped['selectedExped']]![index])
+                                ? selectedItems.remove(items[typeExped['selectedExped']]![index])
+                                : selectedItems.add(items[typeExped['selectedExped']]![index]);
+                            // print(selectedValue);
+                            // print(items[typeExped['selectedExped']]![index]);
+                            if (items[typeExped['selectedExped']]![index] != selectedItems[0]) {
                               setState(() {
                                 selectedValue =
-                                    selectedItems.contains(items[index]);
+                                    selectedItems.contains(items[typeExped['selectedExped']]![index]);
                                 selectedItems.isNotEmpty
                                     ? selectedItems.remove(selectedItems[0])
                                     : print('item ja selecionado');
                               });
-                            } else if (items[index] == selectedItems[0]) {
+                            } else if (items[typeExped['selectedExped']]![index] == selectedItems[0]) {
                               setState(() {
                                 selectedValue = false;
                               });
@@ -119,7 +136,7 @@ class SelectActivityPageState extends State<SelectActivityPage> {
                               setState(() {
                                 print('item ja selecionado else');
                                 selectedValue =
-                                    selectedItems.contains(items[index]);
+                                    selectedItems.contains(items[typeExped['selectedExped']]![index]);
                               });
                             }
                           }),
@@ -130,39 +147,30 @@ class SelectActivityPageState extends State<SelectActivityPage> {
             ),
           ),
           const SizedBox(
-            height: 170,
+            height: 200,
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.cyan,
               fixedSize: const Size(180, 35),
             ),
-            onPressed: selectedRoute.isNotEmpty ? () {
+             onPressed: typeExped['selectedExped'] == 'rota' ? selectedRoute.isNotEmpty ? () {
               Modular.to.pushNamed('/select_client',
                   arguments: {'selectedValue': selectedRoute});
+            } : () { print('selecione um item');} : selectedRoute.isNotEmpty ? () {
+              print(typeExped);
+              print('mudando de pagina');
+              Modular.to.pushNamed('/conference', arguments: {'selectedValue': selectedRoute, 'selectedExped': typeExped['selectedExped']});
             } : () { print('selecione um item');},
             child: const Text(
               'Conferência',
               style: TextStyle(color: Colors.white),
             ),
           ),
-          const SizedBox(
-            height: 10,
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.cyan,
-              fixedSize: const Size(180, 35),
-            ),
-            onPressed: () {
-              print('sem ação');
-            },
-            child: const Text(
-              'GERAR ETIQUETA',
-              style: TextStyle(color: Colors.white),
-              //
-            ),
-          )
+          // const SizedBox(
+          //   height: 10,
+          // ),
+          
         ],
       ),
     );

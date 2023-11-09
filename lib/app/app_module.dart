@@ -1,9 +1,12 @@
+import 'package:central_stock_mobile/app/modules/Expedition/expedition_module.dart';
 import 'package:central_stock_mobile/app/modules/Expedition/expedition_page.dart';
 import 'package:central_stock_mobile/app/modules/Expedition/expedition_store.dart';
 import 'package:central_stock_mobile/app/modules/Expedition/select_activity_page.dart';
 import 'package:central_stock_mobile/app/modules/Expedition/select_client_page.dart';
 import 'package:central_stock_mobile/app/modules/Expedition/select_expedition_type_page.dart';
 import 'package:central_stock_mobile/app/modules/Expedition/select_route_page.dart';
+import 'package:central_stock_mobile/app/modules/Expedition/service_ticket_page.dart';
+import 'package:central_stock_mobile/app/modules/Expedition/transport_ticket_page.dart';
 import 'package:central_stock_mobile/app/repositories/expedition_repository.dart';
 import 'package:central_stock_mobile/app/modules/basket/basket_module.dart';
 import 'package:central_stock_mobile/app/modules/home/home_initial_screen_page.dart';
@@ -34,7 +37,10 @@ class AppModule extends Module {
     ChildRoute('/select_activity', child: (_, args) => const SelectActivityPage()),
     ChildRoute('/select_client', child: (_, args) => const SelectClientPage()),
     ChildRoute('/select_route', child: (_, args) => const SelectRoutePage()),
-    ChildRoute('/type_expedition', child: (_, args) => const SelectExpeditionTypePage()),
+    ModuleRoute('/type_expedition', module: ExpeditionModule()),
+    // ChildRoute('/type_expedition', child: (_, args) => const SelectExpeditionTypePage()),
+    ChildRoute('/service_ticket', child: (_, args) => const ServiceTicketPage()),
+    ChildRoute('/transport_ticket', child: (_, args) => const TransportTicketPage()),
     ChildRoute('/initial_screen',
         child: (_, args) => const HomeInitialScreenPage()),
   ];

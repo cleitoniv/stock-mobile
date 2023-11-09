@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
+import 'expedition_store.dart';
+
 class SelectRoutePage extends StatefulWidget {
   final String title;
   const SelectRoutePage({Key? key, this.title = 'SelectRoutePage'})
@@ -10,9 +12,11 @@ class SelectRoutePage extends StatefulWidget {
 }
 
 class SelectRoutePageState extends State<SelectRoutePage> {
+  late final ExpeditionStore expedStore;
   var selectedItems = [];
   bool selectedValue = false;
   var selectedRoute = '';
+  var items2 = [];
   var items = [
     'SÃO PAULO',
     'MINAS GERAIS',
@@ -20,10 +24,33 @@ class SelectRoutePageState extends State<SelectRoutePage> {
     'BAHIA',
     'BRASILIA'
   ];
-  // var items = 'ES Motoboy';
+  
+  @override
+  void initState() {
+    super.initState();
+    expedStore = Modular.get<ExpeditionStore>();
+  }
+
+  @override
+  void dispose() {
+    Modular.dispose<ExpeditionStore>();
+    super.dispose();
+  }
+  
+   routes(params) async {
+    var order = await expedStore.getExpedRoutes(params);
+    print(order);
+    setState(() {
+      items2 = order;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+
+    if (items2.isEmpty) {
+      routes(selectedRoute);
+    }
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -99,6 +126,9 @@ class SelectRoutePageState extends State<SelectRoutePage> {
                             setState(() {
                               selectedRoute = items[index];
                             });
+                            if (items2.isEmpty) {
+                              routes(selectedRoute);
+                            }
                             selectedItems.contains(items[index])
                                 ? selectedItems.remove(items[index])
                                 : selectedItems.add(items[index]);
@@ -139,9 +169,11 @@ class SelectRoutePageState extends State<SelectRoutePage> {
               backgroundColor: Colors.cyan,
               fixedSize: const Size(180, 35),
             ),
-            onPressed: () {
+            onPressed: selectedRoute != '' ? () {
+
+            } : () {
               Modular.to.pushNamed('/select_activity',
-                  arguments: {'selectedValue': selectedRoute});
+                  arguments: {'selectedRoute': selectedRoute, 'selectedExped': 'rota'});
             },
             child: const Text(
               'Conferencia',
@@ -157,7 +189,8 @@ class SelectRoutePageState extends State<SelectRoutePage> {
               fixedSize: const Size(180, 35),
             ),
             onPressed: () {
-              print('sem ação');
+              Modular.to.pushNamed('/transport_ticket',
+                  arguments: {'selectedValue': selectedRoute});
             },
             child: const Text(
               'GERAR ETIQUETA',

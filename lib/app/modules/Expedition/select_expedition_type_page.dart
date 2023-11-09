@@ -3,10 +3,14 @@ import 'package:flutter_modular/flutter_modular.dart';
 
 class SelectExpeditionTypePage extends StatefulWidget {
   final String title;
-  const SelectExpeditionTypePage({Key? key, this.title = 'SelectExpeditionTypePage'}) : super(key: key);
+  const SelectExpeditionTypePage(
+      {Key? key, this.title = 'SelectExpeditionTypePage'})
+      : super(key: key);
   @override
-  SelectExpeditionTypePageState createState() => SelectExpeditionTypePageState();
+  SelectExpeditionTypePageState createState() =>
+      SelectExpeditionTypePageState();
 }
+
 class SelectExpeditionTypePageState extends State<SelectExpeditionTypePage> {
   @override
   Widget build(BuildContext context) {
@@ -48,13 +52,10 @@ class SelectExpeditionTypePageState extends State<SelectExpeditionTypePage> {
                         alignment: Alignment.topCenter,
                         child: OutlinedButton(
                           style: ButtonStyle(
-                            side: MaterialStateProperty.all( BorderSide(
+                            side: MaterialStateProperty.all(BorderSide(
                                 color:
-                                //  Colors.black
-                                Theme.of(context).highlightColor
-                                )
-                                )
-                                ,
+                                    //  Colors.black
+                                    Theme.of(context).highlightColor)),
                             elevation: MaterialStateProperty.all<double>(0),
                             backgroundColor:
                                 MaterialStateProperty.all<Color>(Colors.white),
@@ -67,26 +68,23 @@ class SelectExpeditionTypePageState extends State<SelectExpeditionTypePage> {
                               const RoundedRectangleBorder(),
                             ),
                           ),
-                          onPressed: () { 
-                            print('botão sem ação por enquanto');
-                           } 
-                          // Modular.to.pushNamed('/select_route')
-                          ,
+                          onPressed: () {
+                            Modular.to.pushNamed('/select_activity',
+                                arguments: {'selectedExped': 'distribuidor'});
+                          },
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children:  [
+                            children: [
                               Flexible(
                                 flex: 2,
                                 child: Image.asset(
-                                        'assets/images/distribuidor.png'),
+                                    'assets/images/distribuidor.png'),
                               ),
                               const Flexible(
                                 flex: 1,
                                 fit: FlexFit.tight,
-                                child: 
-                                Center(
-                                  child: 
-                                  Text(
+                                child: Center(
+                                  child: Text(
                                     "DISTRIBUIDOR",
                                     textAlign: TextAlign.left,
                                     maxLines: 1,
@@ -128,11 +126,10 @@ class SelectExpeditionTypePageState extends State<SelectExpeditionTypePage> {
                           ,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children:  [
+                            children: [
                               Flexible(
                                 flex: 2,
-                                child: Image.asset(
-                                        'assets/images/rota.png'),
+                                child: Image.asset('assets/images/rota.png'),
                               ),
                               const Flexible(
                                 flex: 1,
