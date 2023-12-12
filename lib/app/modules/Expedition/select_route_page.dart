@@ -16,14 +16,7 @@ class SelectRoutePageState extends State<SelectRoutePage> {
   var selectedItems = [];
   bool selectedValue = false;
   var selectedRoute = '';
-  var items2 = [];
-  var items = [
-    'SÃO PAULO',
-    'MINAS GERAIS',
-    'ESPIRITO SANTO',
-    'BAHIA',
-    'BRASILIA'
-  ];
+  var items = [];
   
   @override
   void initState() {
@@ -39,16 +32,17 @@ class SelectRoutePageState extends State<SelectRoutePage> {
   
    routes(params) async {
     var order = await expedStore.getExpedRoutes(params);
+    print('acessando aqui %%%%%%');
     print(order);
     setState(() {
-      items2 = order;
+      items = order;
     });
   }
 
   @override
   Widget build(BuildContext context) {
 
-    if (items2.isEmpty) {
+    if (items.isEmpty) {
       routes(selectedRoute);
     }
     return Scaffold(
@@ -116,7 +110,7 @@ class SelectRoutePageState extends State<SelectRoutePage> {
                               const Color.fromARGB(255, 34, 218, 231),
                           title: Text(
                             maxLines: 1,
-                            items[index],
+                            "${items[index]}",
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                                 fontWeight: FontWeight.w900,
@@ -126,24 +120,25 @@ class SelectRoutePageState extends State<SelectRoutePage> {
                             setState(() {
                               selectedRoute = items[index];
                             });
-                            if (items2.isEmpty) {
+                            if (items.isEmpty) {
                               routes(selectedRoute);
                             }
                             selectedItems.contains(items[index])
                                 ? selectedItems.remove(items[index])
                                 : selectedItems.add(items[index]);
-                            print(selectedValue);
-                            print(items[index]);
-                            if (items[index] != selectedItems[0]) {
-                              print('passando');
+
+                            if (selectedItems.isNotEmpty && items[index] != selectedItems.first) {
                               setState(() {
                                 selectedValue =
                                     selectedItems.contains(items[index]);
                                 selectedItems.isNotEmpty
-                                    ? selectedItems.remove(selectedItems[0])
+                                    ? selectedItems.remove(selectedItems.first)
                                     : print('item ja selecionado');
                               });
-                            } else if (items[index] == selectedItems[0]) {
+                            }
+                             else if (selectedItems.isEmpty) {
+                              print("item selecionado");
+                              print(selectedItems);
                               setState(() {
                                 selectedValue = false;
                               });
@@ -166,14 +161,13 @@ class SelectRoutePageState extends State<SelectRoutePage> {
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.cyan,
+              backgroundColor:selectedRoute == '' || selectedItems.isEmpty ? Colors.grey : Colors.cyan,
               fixedSize: const Size(180, 35),
             ),
-            onPressed: selectedRoute != '' ? () {
-
+            onPressed: selectedRoute == '' || selectedItems.isEmpty ? () {
+                print(selectedRoute);
             } : () {
-              Modular.to.pushNamed('/select_activity',
-                  arguments: {'selectedRoute': selectedRoute, 'selectedExped': 'rota'});
+              Modular.to.pushNamed('/select_activity', arguments: {'selectedRoute': selectedRoute, 'selectedExped': 'rota'});
             },
             child: const Text(
               'Conferencia',
@@ -188,7 +182,7 @@ class SelectRoutePageState extends State<SelectRoutePage> {
               backgroundColor: Colors.cyan,
               fixedSize: const Size(180, 35),
             ),
-            onPressed: () {
+            onPressed: selectedRoute.isEmpty ? () { } : () {
               Modular.to.pushNamed('/transport_ticket',
                   arguments: {'selectedValue': selectedRoute});
             },

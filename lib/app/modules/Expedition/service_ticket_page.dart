@@ -149,11 +149,11 @@ class ServiceTicketPageState extends State<ServiceTicketPage> {
                           side: BorderSide(color: Colors.black),
                         ),
                         selected:
-                            selectedItems.contains(orderList[index]['servico']),
+                            selectedItems.contains(orderList[index]['cliente']),
                         selectedTileColor:
                             const Color.fromARGB(255, 102, 248, 168),
                         title: Text(
-                          orderList[index]['servico'] as String,
+                          orderList[index]['cliente'] as String,
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                               fontWeight: FontWeight.w900, color: Colors.black),

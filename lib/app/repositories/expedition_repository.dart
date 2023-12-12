@@ -9,8 +9,8 @@ class ExpeditionRepository {
   Future<Response> expedClient(params) async {
     final storage = new SecureStorage();
     Map auth = await storage.readAll();
-    return http.post(
-      "/api/agent/exped_clients",
+    return http.get(
+      "/api/agent/exped_clients?params=$params",
       data: jsonEncode(params),
       options: Options(
         headers: {
@@ -54,8 +54,8 @@ class ExpeditionRepository {
   Future<Response> expedActivities(params) async {
     final storage = new SecureStorage();
     Map auth = await storage.readAll();
-    return http.post(
-      "/api/agent/exped_activities",
+    return http.get(
+      "/api/agent/exped_activities?params=$params",
       data: jsonEncode(params),
       options: Options(
         headers: {
@@ -66,23 +66,48 @@ class ExpeditionRepository {
     );
   }
 
-  // Future<Response> currentUser() async {
-  //   final store = new SecureStorage();
-  //   Map auth = await store.readAll();
-  //   return http.get("/api/agent/current_user",
-  //       options: Options(headers: {
-  //         "Content-Type": "application/json",
-  //         "Authorization": "Bearer ${auth['auth']}"
-  //       }));
-  // }
+  Future<Response> genTicketRoute(param) async {
+    final storage = new SecureStorage();
+    Map auth = await storage.readAll();
+    return http.post(
+      "/api/agent/gen_ticket_route",
+      data: jsonEncode({'params': param}),
+      options: Options(
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer ${auth['auth']}"
+        },
+      ),
+    );
+  }
 
-  // Future<Response> start() async {
-  //   final store = new SecureStorage();
-  //   Map auth = await store.readAll();
-  //   return http.post("/api/agent/start",
-  //       options: Options(headers: {
-  //         "Content-Type": "application/json",
-  //         "Authorization": "Bearer ${auth['auth']}"
-  //       }));
-  // }
+  Future<Response> genTicketClient(param) async {
+    final storage = new SecureStorage();
+    Map auth = await storage.readAll();
+    return http.post(
+      "/api/agent/gen_ticket_client",
+      data: jsonEncode({'params': param}),
+      options: Options(
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer ${auth['auth']}"
+        },
+      ),
+    );
+  }
+
+  Future<Response> genTicketActivity(param) async {
+    final storage = new SecureStorage();
+    Map auth = await storage.readAll();
+    return http.post(
+      "/api/agent/gen_ticket_activity",
+      data: jsonEncode({'params': param}),
+      options: Options(
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer ${auth['auth']}"
+        },
+      ),
+    );
+  }
 }

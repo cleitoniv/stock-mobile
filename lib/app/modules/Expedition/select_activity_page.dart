@@ -1,45 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
+import 'expedition_store.dart';
+
 class SelectActivityPage extends StatefulWidget {
   final String title;
-  const SelectActivityPage({Key? key, this.title = 'SelectActivityPage'}) : super(key: key);
+  const SelectActivityPage({Key? key, this.title = 'SelectActivityPage'})
+      : super(key: key);
   @override
   SelectActivityPageState createState() => SelectActivityPageState();
 }
+
 class SelectActivityPageState extends State<SelectActivityPage> {
+  late final ExpeditionStore expedStore;
   var selectedItems = [];
   bool selectedValue = false;
   var selectedRoute = '';
-  // var items = [
-  //   'SP MOTOBOY - 1',
-  //   'SP MOTOBOY - 2',
-  //   'SP MOTOBOY - 3',
-  //   'SP MOTOBOY - 4',
-  //   'SP SEDEX'
-  // ];
-  
-  var items = {
-    'rota': [
-    'SP MOTOBOY - 1',
-    'SP MOTOBOY - 2',
-    'SP MOTOBOY - 3',
-    'SP MOTOBOY - 4',
-    'SP SEDEX'
-  ],'distribuidor': [
-    'CRYSTAL',
-    'ESTRELA',
-    'PRIME'
-  ]
-  };
-  // var items = 'ES Motoboy';
+
+  var items = {};
+
+  @override
+  void initState() {
+    super.initState();
+    expedStore = Modular.get<ExpeditionStore>();
+  }
+
+  @override
+  void dispose() {
+    Modular.dispose<ExpeditionStore>();
+    super.dispose();
+  }
+
+  activities(params) async {
+    var order = await expedStore.getExpedActivities(params);
+    setState(() {
+      items = order;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final typeExped =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
-        print(typeExped);
-        print(items[typeExped['selectedExped']]);
+    print(typeExped);
+    print(items[typeExped['selectedExped']]);
+    if (items.isEmpty) {
+      activities(typeExped);
+    }
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -100,12 +107,13 @@ class SelectActivityPageState extends State<SelectActivityPage> {
                           shape: const RoundedRectangleBorder(
                             side: BorderSide(color: Colors.black),
                           ),
-                          selected: selectedItems.contains(items[typeExped['selectedExped']]![index]),
+                          selected: selectedItems.contains(
+                              items[typeExped['selectedExped']]![index]),
                           selectedTileColor:
                               const Color.fromARGB(255, 34, 218, 231),
                           title: Text(
                             maxLines: 1,
-                            items[typeExped['selectedExped']]![index],
+                            "${items[typeExped['selectedExped']][index]}",
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                                 fontWeight: FontWeight.w900,
@@ -113,30 +121,32 @@ class SelectActivityPageState extends State<SelectActivityPage> {
                           ),
                           onTap: () {
                             setState(() {
-                              selectedRoute = items[typeExped['selectedExped']]![index];
+                              selectedRoute =
+                                  items[typeExped['selectedExped']][index];
                             });
-                            selectedItems.contains(items[typeExped['selectedExped']]![index])
-                                ? selectedItems.remove(items[typeExped['selectedExped']]![index])
-                                : selectedItems.add(items[typeExped['selectedExped']]![index]);
-                            // print(selectedValue);
-                            // print(items[typeExped['selectedExped']]![index]);
-                            if (items[typeExped['selectedExped']]![index] != selectedItems[0]) {
+                            selectedItems.contains(
+                                    items[typeExped['selectedExped']][index])
+                                ? selectedItems.remove(items[typeExped['selectedExped']][index])
+                                : selectedItems.add(items[typeExped['selectedExped']][index]);
+                            if (selectedItems.isNotEmpty &&
+                                items[typeExped['selectedExped']][index] !=
+                                    selectedItems.first) {
                               setState(() {
-                                selectedValue =
-                                    selectedItems.contains(items[typeExped['selectedExped']]![index]);
+                                selectedValue = selectedItems.contains(
+                                    items[typeExped['selectedExped']][index]);
                                 selectedItems.isNotEmpty
-                                    ? selectedItems.remove(selectedItems[0])
+                                    ? selectedItems.remove(selectedItems.first)
                                     : print('item ja selecionado');
                               });
-                            } else if (items[typeExped['selectedExped']]![index] == selectedItems[0]) {
+                            } else if (selectedItems.isEmpty) {
                               setState(() {
                                 selectedValue = false;
                               });
                             } else {
+                              print('item ja selecionado else');
                               setState(() {
-                                print('item ja selecionado else');
-                                selectedValue =
-                                    selectedItems.contains(items[typeExped['selectedExped']]![index]);
+                                selectedValue = selectedItems.contains(
+                                    items[typeExped['selectedExped']][index]);
                               });
                             }
                           }),
@@ -151,26 +161,34 @@ class SelectActivityPageState extends State<SelectActivityPage> {
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.cyan,
+              backgroundColor:
+                  selectedItems.isNotEmpty ? Colors.cyan : Colors.grey,
               fixedSize: const Size(180, 35),
             ),
-             onPressed: typeExped['selectedExped'] == 'rota' ? selectedRoute.isNotEmpty ? () {
-              Modular.to.pushNamed('/select_client',
-                  arguments: {'selectedValue': selectedRoute});
-            } : () { print('selecione um item');} : selectedRoute.isNotEmpty ? () {
-              print(typeExped);
-              print('mudando de pagina');
-              Modular.to.pushNamed('/conference', arguments: {'selectedValue': selectedRoute, 'selectedExped': typeExped['selectedExped']});
-            } : () { print('selecione um item');},
+            onPressed: typeExped['selectedExped'] == 'rota'
+                ? selectedItems.isNotEmpty
+                    ? () {
+                        Modular.to.pushNamed('/select_client',
+                            arguments: {'selectedValue': selectedRoute});
+                      }
+                    : () {
+                        print('selecione um item');
+                      }
+                : selectedItems.isNotEmpty
+                    ? () {
+                        Modular.to.pushNamed('/conference', arguments: {
+                          'selectedValue': selectedRoute,
+                          'selectedExped': typeExped['selectedExped']
+                        });
+                      }
+                    : () {
+                        print('selecione um item');
+                      },
             child: const Text(
               'Conferência',
               style: TextStyle(color: Colors.white),
             ),
           ),
-          // const SizedBox(
-          //   height: 10,
-          // ),
-          
         ],
       ),
     );

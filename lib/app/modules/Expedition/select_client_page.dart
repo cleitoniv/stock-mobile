@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
+import 'expedition_store.dart';
+
 class SelectClientPage extends StatefulWidget {
   final String title;
   const SelectClientPage({Key? key, this.title = 'SelectClientPage'}) : super(key: key);
@@ -8,20 +10,41 @@ class SelectClientPage extends StatefulWidget {
   SelectClientPageState createState() => SelectClientPageState();
 }
 class SelectClientPageState extends State<SelectClientPage> {
+  late final ExpeditionStore expedStore;
   var selectedItems = [];
   bool selectedValue = false;
   var selectedRoute = '';
-  var items = [
-    'CLEITON MEIRELES',
-    'PAULO MADEIRA',
-    'ALBERTO BITTECOURT',
-    'THIAGO BOEKER',
-    'JESSE ALVES'
-  ];
-  // var items = 'ES Motoboy';
+  var items = [];
+
+  @override
+  void initState() {
+    super.initState();
+    expedStore = Modular.get<ExpeditionStore>();
+  }
+
+  @override
+  void dispose() {
+    Modular.dispose<ExpeditionStore>();
+    super.dispose();
+  }
+
+  clients(params) async {
+    var order = await expedStore.getExpedClients(params);
+    print('meu retorno:');
+    print(order);
+    setState(() {
+      items = order;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+    print('parametros vindos da pag anterior');
+    print(args);
+    if (items.isEmpty) {
+      clients('mudar parametro para args');
+    }
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -82,12 +105,12 @@ class SelectClientPageState extends State<SelectClientPage> {
                           shape: const RoundedRectangleBorder(
                             side: BorderSide(color: Colors.black),
                           ),
-                          selected: selectedItems.contains(items[index]),
+                          selected: selectedItems.contains(items[index]['cliente']),
                           selectedTileColor:
                               const Color.fromARGB(255, 34, 218, 231),
                           title: Text(
                             maxLines: 1,
-                            items[index],
+                            "${items[index]['cliente']}",
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                                 fontWeight: FontWeight.w900,
@@ -95,23 +118,23 @@ class SelectClientPageState extends State<SelectClientPage> {
                           ),
                           onTap: () {
                             setState(() {
-                              selectedRoute = items[index];
+                              selectedRoute = items[index]['cliente'];
                             });
-                            selectedItems.contains(items[index])
-                                ? selectedItems.remove(items[index])
-                                : selectedItems.add(items[index]);
+                            selectedItems.contains(items[index]['cliente'])
+                                ? selectedItems.remove(items[index]['cliente'])
+                                : selectedItems.add(items[index]['cliente']);
                             print(selectedValue);
-                            print(items[index]);
-                            if (items[index] != selectedItems[0]) {
+                            print(items[index]['cliente']);
+                            if (selectedItems.isNotEmpty && items[index]['cliente'] != selectedItems.first) {
                               print('passando');
                               setState(() {
                                 selectedValue =
-                                    selectedItems.contains(items[index]);
+                                    selectedItems.contains(items[index]['cliente']);
                                 selectedItems.isNotEmpty
                                     ? selectedItems.remove(selectedItems[0])
                                     : print('item ja selecionado');
                               });
-                            } else if (items[index] == selectedItems[0]) {
+                            } else if (selectedItems.isEmpty) {
                               setState(() {
                                 selectedValue = false;
                               });
@@ -119,7 +142,7 @@ class SelectClientPageState extends State<SelectClientPage> {
                               setState(() {
                                 print('item ja selecionado else');
                                 selectedValue =
-                                    selectedItems.contains(items[index]);
+                                    selectedItems.contains(items[index]['cliente']);
                               });
                             }
                           }),
@@ -134,10 +157,12 @@ class SelectClientPageState extends State<SelectClientPage> {
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.cyan,
+              backgroundColor: selectedItems.isEmpty ? Colors.grey : Colors.cyan,
               fixedSize: const Size(180, 35),
             ),
-            onPressed: () {
+            onPressed: selectedItems.isEmpty ? () {
+              print('Selecione um cliente');
+            } : () {
               Modular.to.pushNamed('/conference',
                   arguments: {'selectedValue': selectedRoute});
             },

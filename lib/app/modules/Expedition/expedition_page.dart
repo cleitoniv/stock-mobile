@@ -16,6 +16,7 @@ class ExpeditionPageState extends State<ExpeditionPage> {
   String scannerUid = '';
   late final ExpeditionStore expedStore;
   MobileScannerController controller = MobileScannerController();
+  List gerenalList = [];
   List selectedItems = [];
   var orderList = [];
 
@@ -180,11 +181,12 @@ class ExpeditionPageState extends State<ExpeditionPage> {
                backgroundColor: orderList.length == selectedItems.length ? Theme.of(context).highlightColor : Colors.grey
               ),
               onPressed: orderList.length == selectedItems.length ? () {
+                Modular.to.pushNamed('/conference',
+                  arguments: {'routeChecked': args['selectedValue']});
                 print(selectedItems);
                 print(scannerUid);
-                // store.select(scannerUid);
               } : () {
-                
+                print('Leia todos os pedidos');
               },
               child: const Text(
                 "Gerar etiqueta",
